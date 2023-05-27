@@ -5,7 +5,10 @@ local ts = game:GetService("TweenService");
 local uis = game:GetService("UserInputService");
 local mouse = lp:GetMouse();
 
-function library:Init()
+function library:Init(info)
+	info.watermark = info.watermark or false;
+	info.acIndicator = info.acIndicator or false;
+	
 	local Protestix = Instance.new("ScreenGui")
 	local Tabs = Instance.new("Frame")
 	local UIListLayout_3 = Instance.new("UIListLayout")
@@ -93,6 +96,7 @@ function library:Init()
 	Watermark.BorderSizePixel = 0
 	Watermark.Position = UDim2.new(0.0116383489, 0, 0.0122699738, 0)
 	Watermark.Size = UDim2.new(0.109756097, 0, 0.0398772992, 0)
+	Watermark.Enabled = info.watermark
 
 	UICorner.CornerRadius = UDim.new(0, 5)
 	UICorner.Parent = Watermark
@@ -251,10 +255,10 @@ function library:Init()
 	UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(144, 144, 144)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))}
 	UIGradient_2.Parent = UIStroke
 	
-	uarc.Parent = Watermark
+	uarc.Parent = TargetHud
 	uarc.AspectType = Enum.AspectType.FitWithinMaxSize
 	uarc.DominantAxis = Enum.DominantAxis.Width
-	uarc.AspectRatio = 5.5
+	uarc.AspectRatio = 2.95
 	
 	function mainUtil:TargetHud(info)
 		info.Player = info.Player or false;
@@ -426,6 +430,7 @@ function library:Init()
 	AntiCheatInfo.BorderSizePixel = 0
 	AntiCheatInfo.Position = UDim2.new(0.434, 0, 0.94, 0)
 	AntiCheatInfo.Size = UDim2.new(0.132, 0, 0.031, 0)
+	AntiCheatInfo.Visible = info.acIndicator;
 
 	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(144, 144, 144)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))}
 	UIGradient.Parent = AntiCheatInfo
