@@ -96,7 +96,7 @@ function library:Init(info)
 	Watermark.BorderSizePixel = 0
 	Watermark.Position = UDim2.new(0.0116383489, 0, 0.0122699738, 0)
 	Watermark.Size = UDim2.new(0.109756097, 0, 0.0398772992, 0)
-	Watermark.Enabled = info.watermark
+	Watermark.Visible = info.watermark
 
 	UICorner.CornerRadius = UDim.new(0, 5)
 	UICorner.Parent = Watermark
