@@ -220,15 +220,15 @@ function library:Init()
 	hpText.AnchorPoint = Vector2.new(0.5, 0.5)
 	hpText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	hpText.BackgroundTransparency = 1.000
-	hpText.LayoutOrder = 2
+	hpText.LayoutOrder = 0
 	hpText.Position = UDim2.new(0.649, 0, 0.816, 0)
-	hpText.Size = UDim2.new(0.337, 0, 1.179, 0)
+	hpText.Size = UDim2.new(0.337, 0, 0.179, 0)
 	hpText.ZIndex = 2
 	hpText.FontFace = Font.new("rbxassetid://11702779517", Enum.FontWeight.SemiBold)
 	hpText.Text = "0"
 	hpText.TextColor3 = Color3.fromRGB(233, 223, 224)
-	hpText.TextScaled = true
 	hpText.TextSize = 24.000
+	hpText.TextScaled = true
 	hpText.TextWrapped = true
 
 	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(144, 144, 144)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))}
