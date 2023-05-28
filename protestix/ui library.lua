@@ -6,6 +6,18 @@ local uis = game:GetService("UserInputService");
 local mouse = lp:GetMouse();
 
 function library:Init(info)
+	local Settings = {
+		KillauraFlag = {
+			enabled = true;
+		},
+		KillauraRotationsFlag = {
+			enabled = true;
+		},
+		KillauraAttackRange = {
+			ammout = 1;
+		}
+	}
+	
 	info.watermark = info.watermark or false;
 	info.acIndicator = info.acIndicator or false;
 	
@@ -615,10 +627,15 @@ function library:Init(info)
 			
 			info.Name = info.Name or "button";
 			info.Dropdown = info.Dropdown or {};
-			info.Enabled = info.Enabled or false;
 			info.Open = info.Open or false;
 			info.Flag = info.Flag or tostring(info.Name .. "Flag");
 			callback = callback or function() end;
+			
+			local buttonSettings = {
+				enabled = Settings[info.Flag] and Settings[info.Flag].enabled or false
+			}
+			
+			info.Enabled = buttonSettings.enabled or info.Enabled or false;
 			
 			local waitingToPress = false;
 			local key = nil;
@@ -777,9 +794,8 @@ function library:Init(info)
 			end)
 			
 			if info.Enabled then
-				ButtonName.TextColor3 = Color3.fromRGB(80, 159, 255);
-			else
-				ButtonName.TextColor3 = Color3.fromRGB(163, 163, 163);
+				ButtonName.TextColor3 = Color3.fromRGB(0, 0, 0)
+				Button.BackgroundColor3 = Color3.fromRGB(138, 152, 255)
 			end
 			
 			Button.MouseButton1Click:Connect(function()
@@ -831,9 +847,14 @@ function library:Init(info)
 				dropdownYsize += 26;
 				
 				info.Name = info.Name or "toggle";
-				info.Enabled = info.Enabled or false;
 				info.Flag = info.Flag or tostring(info.Name .. "Flag");
 				callback = callback or function() end;
+				
+				local toggleSettings = {
+					enabled = Settings[info.Flag] and Settings[info.Flag].enabled or false
+				}
+
+				info.Enabled = toggleSettings.enabled or info.Enabled or false;
 				
 				local slide = Instance.new("Frame")
 				local UICorner_2 = Instance.new("UICorner")
@@ -907,6 +928,17 @@ function library:Init(info)
 				UITextSizeConstraint.Parent = ToggleName
 				UITextSizeConstraint.MaxTextSize = 14
 				
+				callback(info.Enabled)
+				
+				if info.Enabled then
+					ts:Create(ToggleName, TweenInfo.new(0.5), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play();
+					ts:Create(circle, TweenInfo.new(0.5), {
+						Position = UDim2.new(0.8, 0, 0.47, 0),
+						BackgroundColor3 = Color3.fromRGB(60, 76, 216)
+					}):Play();
+					ts:Create(slide, TweenInfo.new(0.5), {BackgroundColor3 = Color3.fromRGB(45, 45, 81)}):Play();
+				end
+				
 				hitbox.MouseButton1Click:Connect(function()
 					info.Enabled = not info.Enabled;
 					callback(info.Enabled);
@@ -935,10 +967,17 @@ function library:Init(info)
 				info.Name = info.Name or "slider";
 				info.Min = info.Min or 1;
 				info.Max = info.Max or 10;
-				info.Value = info.Value or (info.Max / 2);
 				info.RecommendedValue = info.RecommendedValue or info.Value;
 				info.Flag = info.Flag or tostring(info.Name .. "Flag")
 				callback = callback or function() end;
+				
+				local sliderSettings = {
+					ammout = Settings[info.Flag] and Settings[info.Flag].ammout or false
+				}
+
+				info.Value = sliderSettings.ammout or info.Value or (info.Max / 2);
+				
+				callback(info.Value)
 				
 				local Slider = Instance.new("Frame")
 				local SliderName = Instance.new("TextLabel")
@@ -1128,12 +1167,15 @@ function library:Init(info)
 end
 
 
---[[local main = library:Init();
+--[[local main = library:Init({
+	watermark = false,
+	acIndicator = false	
+});
 local tab = main:CreateTab({Name = "Combat"});
 
 local killaura = tab:CreateButton({Name = "Killaura", Enabled = false, Flag = "KillauraFlag"}, function(callback)
 	print(callback);
-	main:Notification({Name = "Killaura", Status = callback, Seconds = 4, Description = false});
+	main:Notification({Name = "Killaura", Status = callback, Seconds = 4});
 end);
 
 killaura:CreateToggle({Name = "Rotations", Enabled = false, Flag = "KillauraRotationsFlag"}, function(callback)
