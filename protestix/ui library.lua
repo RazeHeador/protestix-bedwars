@@ -4,19 +4,47 @@ local lp = game:GetService("Players").LocalPlayer;
 local ts = game:GetService("TweenService");
 local uis = game:GetService("UserInputService");
 local mouse = lp:GetMouse();
+local httpservice = game:GetService("HttpService")
 
 function library:Init(info)
+	if game:GetService("CoreGui"):FindFirstChild("Protestix") then game:GetService("CoreGui"):FindFirstChild("Protestix"):Destroy() end
+
+	for i, v in pairs(game:GetService("CoreGui"):GetChildren()) do if v.Name == "Protestix" then v:Destroy() end end
+
 	local Settings = {
 		KillauraFlag = {
-			enabled = true;
-		},
-		KillauraRotationsFlag = {
-			enabled = true;
-		},
-		KillauraAttackRange = {
-			ammout = 1;
+			enabled = false
 		}
 	}
+
+	local protestix_args = {
+		folderName = "protestix",
+		folder,
+		config
+	}
+	
+	protestix_args.folder = isfolder(protestix_args.folderName) or makefolder(protestix_args.folderName)
+	protestix_args.config = isfile(protestix_args.folderName.."\\config.lua") or writefile(protestix_args.folderName.."\\config.lua", httpservice:JSONEncode(Settings))
+	
+	local readedCFG = httpservice:JSONDecode(readfile(protestix_args.folderName.."\\config.lua"))
+	Settings = readedCFG
+
+	spawn(function()
+		while task.wait(3) do
+			for i, v in pairs(Settings) do
+				print(v)
+			end
+			writefile(protestix_args.folderName.."\\config.lua", httpservice:JSONEncode(Settings))
+		end
+	end)
+
+	--[[
+	for moduleName,moduleTable in pairs(test) do
+		print(moduleName)
+		for moduleFunction, functionSetting in pairs(moduleTable) do
+			print(moduleFunction, functionSetting)
+		end
+	end]]
 	
 	info.watermark = info.watermark or false;
 	info.acIndicator = info.acIndicator or false;
@@ -617,7 +645,7 @@ function library:Init(info)
 		
 		local custom = {};
 		
-		function custom:CreateButton(info, callback)
+		function custom:CreateButton(infoButton, callback)
 			ButtonLayout += 1;
 			
 			listAddY += 27;	
@@ -625,24 +653,30 @@ function library:Init(info)
 				Size = UDim2.new(0, 217, 0, listAddY)
 			}):Play();
 			
-			info.Name = info.Name or "button";
-			info.Dropdown = info.Dropdown or {};
-			info.Open = info.Open or false;
-			info.Flag = info.Flag or tostring(info.Name .. "Flag");
+			infoButton.Name = infoButton.Name or "button";
+			infoButton.Dropdown = infoButton.Dropdown or {};
+			infoButton.Open = infoButton.Open or false;
+			infoButton.Flag = infoButton.Flag or tostring(info.Name .. "Flag");
 			callback = callback or function() end;
+
+			if not Settings[infoButton.Flag] then
+				Settings[infoButton.Flag] = {
+					enabled = false
+				}
+			end
 			
 			local buttonSettings = {
-				enabled = Settings[info.Flag] and Settings[info.Flag].enabled or false
+				enabled = Settings[infoButton.Flag] and Settings[infoButton.Flag].enabled or false
 			}
 			
-			info.Enabled = buttonSettings.enabled or info.Enabled or false;
+			infoButton.Enabled = buttonSettings.enabled or infoButton.Enabled or false;
 			
 			local waitingToPress = false;
 			local key = nil;
 			
 			local dropdownYsize = 0;
 			
-			callback(info.Enabled);
+			callback(infoButton.Enabled);
 			
 			local Button = Instance.new("TextButton")
 			local ButtonName = Instance.new("TextLabel")
@@ -666,7 +700,7 @@ function library:Init(info)
 			Button.AnchorPoint = Vector2.new(0.5, 0.5)
 			Button.LayoutOrder = ButtonLayout;
 
-			ButtonName.Name = info.Name
+			ButtonName.Name = infoButton.Name
 			ButtonName.Parent = Button
 			ButtonName.AnchorPoint = Vector2.new(0.5, 0.5)
 			ButtonName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -675,7 +709,7 @@ function library:Init(info)
 			ButtonName.Size = UDim2.new(0, 199, 0, 19)
 			ButtonName.ZIndex = 2
 			ButtonName.FontFace = Font.new("rbxassetid://11702779517", Enum.FontWeight.SemiBold)
-			ButtonName.Text = info.Name
+			ButtonName.Text = infoButton.Name
 			ButtonName.TextColor3 = Color3.fromRGB(163, 163, 163)
 			ButtonName.TextScaled = true
 			ButtonName.TextSize = 24.000
@@ -744,10 +778,11 @@ function library:Init(info)
 				if input.UserInputType == Enum.UserInputType.Keyboard then
 					if key ~= nil then
 						if input.KeyCode == key then
-							info.Enabled = not info.Enabled;
-							callback(info.Enabled)
+							infoButton.Enabled = not infoButton.Enabled;
+							Settings[infoButton.Flag].enabled = infoButton.Enabled
+							callback(infoButton.Enabled)
 
-							if info.Enabled then
+							if infoButton.Enabled then
 								ts:Create(ButtonName, TweenInfo.new(0.5), {
 									TextColor3 = Color3.fromRGB(0, 0, 0)
 								}):Play();
@@ -793,16 +828,17 @@ function library:Init(info)
 				end
 			end)
 			
-			if info.Enabled then
+			if infoButton.Enabled then
 				ButtonName.TextColor3 = Color3.fromRGB(0, 0, 0)
 				Button.BackgroundColor3 = Color3.fromRGB(138, 152, 255)
 			end
 			
 			Button.MouseButton1Click:Connect(function()
-				info.Enabled = not info.Enabled;
-				callback(info.Enabled)
+				infoButton.Enabled = not infoButton.Enabled;
+				Settings[infoButton.Flag].enabled = infoButton.Enabled
+				callback(infoButton.Enabled)
 				
-				if info.Enabled then
+				if infoButton.Enabled then
 					ts:Create(ButtonName, TweenInfo.new(0.5), {
 						TextColor3 = Color3.fromRGB(0, 0, 0)
 					}):Play();
@@ -820,9 +856,9 @@ function library:Init(info)
 			end);
 			
 			Button.MouseButton2Click:Connect(function()
-				info.Open = not info.Open;
+				infoButton.Open = not infoButton.Open;
 
-				if info.Open then
+				if infoButton.Open then
 					listAddY += dropdownYsize;
 
 					ts:Create(Dropdown, TweenInfo.new(0.5), {
@@ -849,6 +885,13 @@ function library:Init(info)
 				info.Name = info.Name or "toggle";
 				info.Flag = info.Flag or tostring(info.Name .. "Flag");
 				callback = callback or function() end;
+
+				if not Settings[info.Flag] then
+					--table.insert(Settings, info.Flag)
+					Settings[info.Flag] = {
+						enabled = false
+					}
+				end
 				
 				local toggleSettings = {
 					enabled = Settings[info.Flag] and Settings[info.Flag].enabled or false
@@ -941,6 +984,7 @@ function library:Init(info)
 				
 				hitbox.MouseButton1Click:Connect(function()
 					info.Enabled = not info.Enabled;
+					Settings[info.Flag].enabled = info.Enabled
 					callback(info.Enabled);
 					
 					if info.Enabled then
@@ -970,6 +1014,12 @@ function library:Init(info)
 				info.RecommendedValue = info.RecommendedValue or info.Value;
 				info.Flag = info.Flag or tostring(info.Name .. "Flag")
 				callback = callback or function() end;
+
+				if not Settings[info.Flag] then
+					Settings[info.Flag] = {
+						ammout = false
+					}
+				end
 				
 				local sliderSettings = {
 					ammout = Settings[info.Flag] and Settings[info.Flag].ammout or false
@@ -1121,6 +1171,7 @@ function library:Init(info)
 					end
 
 					callback(string.sub(return_value, 1, c));
+					Settings[info.Flag].ammout = tostring(string.sub(return_value, 1, c))
 					text.Text = tostring(string.sub(return_value, 1, c));
 
 					conStart = mouse.Move:Connect(function()
@@ -1140,6 +1191,7 @@ function library:Init(info)
 						circle.Position = UDim2.new(circlePos - 0.03, 0, -0.5, 0);
 						
 						callback(string.sub(return_value, 1, c));
+						Settings[info.Flag].ammout = tostring(string.sub(return_value, 1, c))
 						text.Text = tostring(string.sub(return_value, 1, c));
 						
 						if info.RecommendedValue > tonumber(string.sub(return_value, 1, c)) then
