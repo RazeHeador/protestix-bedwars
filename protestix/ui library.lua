@@ -666,14 +666,13 @@ function library:Init(info)
 				enabled = Settings[infoButton.Flag] and Settings[infoButton.Flag].enabled or false
 			}
 			
-			infoButton.Enabled = buttonSettings.enabled or infoButton.Enabled or false;
+			callback(buttonSettings.enabled);
+			infoButton.Enabled = buttonSettings.enabled;
 			
 			local waitingToPress = false;
 			local key = nil;
 			
 			local dropdownYsize = 0;
-			
-			callback(infoButton.Enabled);
 			
 			local Button = Instance.new("TextButton")
 			local ButtonName = Instance.new("TextLabel")
