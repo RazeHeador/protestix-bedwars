@@ -31,9 +31,6 @@ function library:Init(info)
 
 	spawn(function()
 		while task.wait(3) do
-			for i, v in pairs(Settings) do
-				print(v)
-			end
 			writefile(protestix_args.folderName.."\\config.lua", httpservice:JSONEncode(Settings))
 		end
 	end)
