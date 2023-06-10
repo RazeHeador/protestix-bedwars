@@ -632,8 +632,8 @@ function library:Init(info)
 					task.spawn(function()
 						for t = 1, textLength do
 							local letter = string.sub(text.Text, t, t)
-							if info.lettersSize[string.lower(letter)] then
-								v.Size = UDim2.new(0, v.Size.X.Offset + info.lettersSize[string.lower(letter)], 0, 21)
+							if lettersSize[string.lower(letter)] then
+								v.Size = UDim2.new(0, v.Size.X.Offset + lettersSize[string.lower(letter)], 0, 21)
 							else
 								v.Size = UDim2.new(0, v.Size.X.Offset + 11, 0, 21)
 							end
@@ -954,8 +954,6 @@ function library:Init(info)
 				Button.BackgroundColor3 = Color3.fromRGB(138, 152, 255)
 				ArrayFunction.Visible = true
 			end
-
-			resizeArray()
 			
 			Button.MouseButton1Click:Connect(function()
 				infoButton.Enabled = not infoButton.Enabled;
@@ -1337,6 +1335,8 @@ function library:Init(info)
 			return items;
 		end
 		
+		resizeArray()
+		
 		return custom;
 	end
 	
@@ -1384,3 +1384,4 @@ spawn(function()
 end)]]
 
 return library;
+-- 1
