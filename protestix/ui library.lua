@@ -605,7 +605,6 @@ function library:Init(info)
 	-- ArrayList
 
 	local Arraylist = Instance.new("Frame")
-	local UIListLayout = Instance.new("UIListLayout")
 
 	Arraylist.Name = "Arraylist"
 	Arraylist.Parent = Protestix
@@ -614,10 +613,6 @@ function library:Init(info)
 	Arraylist.BorderSizePixel = 0
 	Arraylist.Position = UDim2.new(0.876722813, 0, 0.0214723926, 0)
 	Arraylist.Size = UDim2.new(0, 151, 0, 632)
-	
-	UIListLayout.Parent = Arraylist
-	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
-	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
 	function resizeArray()
 		for i,v in pairs(Arraylist:GetChildren()) do
@@ -625,6 +620,7 @@ function library:Init(info)
 				if v:FindFirstChildOfClass("TextLabel") then
 					local text = v:FindFirstChildOfClass("TextLabel")
 					local textLength = string.len(text.Text)
+					print(text.Text)
 					
 					v.Size = UDim2.new(0, 0, 0, 21)
 					text.Size = UDim2.new(0, 0, 0, 21)
@@ -642,7 +638,6 @@ function library:Init(info)
 					text.Size = v.Size
 					text.Position = UDim2.new(0, 0, 0, 0)
 					v.LayoutOrder = textLength
-					print(text.Text, textLength)
 		
 					if v:FindFirstChildOfClass("ImageLabel") then
 						local il = v:FindFirstChildOfClass("ImageLabel")
@@ -856,6 +851,7 @@ function library:Init(info)
 					if key ~= nil then
 						if input.KeyCode == key then
 							infoButton.Enabled = not infoButton.Enabled;
+							ArrayFunction.Visible = infoButton.Enabled
 							Settings[infoButton.Flag].enabled = infoButton.Enabled
 							callback(infoButton.Enabled)
 
@@ -1385,3 +1381,5 @@ spawn(function()
 end)]]
 
 return library;
+
+--1
