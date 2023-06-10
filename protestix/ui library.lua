@@ -605,6 +605,7 @@ function library:Init(info)
 	-- ArrayList
 
 	local Arraylist = Instance.new("Frame")
+	local UIListLayout = Instance.new("UIListLayout")
 
 	Arraylist.Name = "Arraylist"
 	Arraylist.Parent = Protestix
@@ -613,37 +614,39 @@ function library:Init(info)
 	Arraylist.BorderSizePixel = 0
 	Arraylist.Position = UDim2.new(0.876722813, 0, 0.0214723926, 0)
 	Arraylist.Size = UDim2.new(0, 151, 0, 632)
+	
+	UIListLayout.Parent = Arraylist
+	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-	function resizeArray()
-		for i,v in pairs(Arraylist:GetChildren()) do
-			if v:IsA("GuiObject") then
-				if v:FindFirstChildOfClass("TextLabel") then
-					local text = v:FindFirstChildOfClass("TextLabel")
-					local textLength = string.len(text.Text)
-					print(text.Text)
-					
-					v.Size = UDim2.new(0, 0, 0, 21)
-					text.Size = UDim2.new(0, 0, 0, 21)
-		
-					task.spawn(function()
-						for t = 1, textLength do
-							local letter = string.sub(text.Text, t, t)
-							if lettersSize[string.lower(letter)] then
-								v.Size = UDim2.new(0, v.Size.X.Offset + lettersSize[string.lower(letter)], 0, 21)
-							else
-								v.Size = UDim2.new(0, v.Size.X.Offset + 11, 0, 21)
-							end
+	function resizeArray(obj)
+		if obj:IsA("GuiObject") then
+			if obj:FindFirstChildOfClass("TextLabel") then
+				local text = obj:FindFirstChildOfClass("TextLabel")
+				local textLength = string.len(text.Text)
+				print(text.Text)
+				
+				obj.Size = UDim2.new(0, 0, 0, 21)
+				text.Size = UDim2.new(0, 0, 0, 21)
+	
+				task.spawn(function()
+					for t = 1, textLength do
+						local letter = string.sub(text.Text, t, t)
+						if lettersSize[string.lower(letter)] then
+							obj.Size = UDim2.new(0, obj.Size.X.Offset + lettersSize[string.lower(letter)], 0, 21)
+						else
+							obj.Size = UDim2.new(0, obj.Size.X.Offset + 11, 0, 21)
 						end
-					end)
-					text.Size = v.Size
-					text.Position = UDim2.new(0, 0, 0, 0)
-					v.LayoutOrder = textLength
-		
-					if v:FindFirstChildOfClass("ImageLabel") then
-						local il = v:FindFirstChildOfClass("ImageLabel")
-						il.Size = UDim2.new(0, v.Size.X.Offset + 15, 0, 36)
-						il.Position = UDim2.new(0.5, 0, 0.5, 0)
 					end
+				end)
+				text.Size = obj.Size
+				text.Position = UDim2.new(0, 0, 0, 0)
+				v.LayoutOrder = textLength
+	
+				if obj:FindFirstChildOfClass("ImageLabel") then
+					local il = obj:FindFirstChildOfClass("ImageLabel")
+					il.Size = UDim2.new(0, obj.Size.X.Offset + 15, 0, 36)
+					il.Position = UDim2.new(0.5, 0, 0.5, 0)
 				end
 			end
 		end
@@ -903,7 +906,6 @@ function library:Init(info)
 
 			local ArrayFunction = Instance.new("Frame")
 			local TextLabel = Instance.new("TextLabel")
-			local UIListLayout_2 = Instance.new("UIListLayout")
 			local glow = Instance.new("ImageLabel")
 
 			ArrayFunction.Parent = Arraylist
@@ -927,11 +929,6 @@ function library:Init(info)
 			TextLabel.TextWrapped = true
 			TextLabel.TextXAlignment = Enum.TextXAlignment.Right
 			
-			UIListLayout_2.Parent = TextLabel
-			UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Right
-			UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
-			UIListLayout_2.VerticalAlignment = Enum.VerticalAlignment.Center
-			
 			glow.Name = "glow"
 			glow.Parent = ArrayFunction
 			glow.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -945,6 +942,8 @@ function library:Init(info)
 			glow.ImageTransparency = 0.510
 			glow.ScaleType = Enum.ScaleType.Slice
 			glow.SliceCenter = Rect.new(10, 10, 118, 118)
+
+			resizeArray(ArrayFunction)
 			
 			if infoButton.Enabled then
 				ButtonName.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -1332,8 +1331,6 @@ function library:Init(info)
 			return items;
 		end
 		
-		resizeArray()
-		
 		return custom;
 	end
 	
@@ -1381,5 +1378,4 @@ spawn(function()
 end)]]
 
 return library;
-
---1
+--4535
