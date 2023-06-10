@@ -641,8 +641,8 @@ function library:Init(info)
 					end)
 					text.Size = v.Size
 					text.Position = UDim2.new(0, 0, 0, 0)
-					v.LayoutOrder = -textLength
-					print(text.Text, -textLength)
+					v.LayoutOrder = textLength
+					print(text.Text, textLength)
 		
 					if v:FindFirstChildOfClass("ImageLabel") then
 						local il = v:FindFirstChildOfClass("ImageLabel")
