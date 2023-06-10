@@ -6,6 +6,35 @@ local uis = game:GetService("UserInputService");
 local mouse = lp:GetMouse();
 local httpservice = game:GetService("HttpService")
 
+local lettersSize = {
+	a = 11,
+	b = 11,
+	c = 10,
+	d = 11,
+	e = 11,
+	f = 7,
+	g = 13,
+	h = 12,
+	i = 5,
+	j = 7,
+	k = 11,
+	l = 5,
+	m = 20,
+	n = 12,
+	o = 12,
+	p = 11,
+	q = 12,
+	r = 9,
+	s = 9,
+	t = 9,
+	u = 12,
+	v = 10,
+	w = 20,
+	x = 11,
+	y = 11,
+	z = 11
+}
+
 function library:Init(info)
 	if game:GetService("CoreGui"):FindFirstChild("Protestix") then game:GetService("CoreGui"):FindFirstChild("Protestix"):Destroy() end
 
@@ -572,6 +601,57 @@ function library:Init(info)
 		antiCheatSettings.high = info.high;
 		callback(antiCheatSettings.blocked)
 	end
+
+	-- ArrayList
+
+	local Arraylist = Instance.new("Frame")
+	local UIListLayout = Instance.new("UIListLayout")
+
+	Arraylist.Name = "Arraylist"
+	Arraylist.Parent = Protestix
+	Arraylist.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Arraylist.BackgroundTransparency = 1.000
+	Arraylist.BorderSizePixel = 0
+	Arraylist.Position = UDim2.new(0.876722813, 0, 0.0214723926, 0)
+	Arraylist.Size = UDim2.new(0, 151, 0, 632)
+	
+	UIListLayout.Parent = Arraylist
+	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+	function resizeArray()
+		for i,v in pairs(Arraylist:GetChildren()) do
+			if v:IsA("GuiObject") then
+				if v:FindFirstChildOfClass("TextLabel") then
+					local text = v:FindFirstChildOfClass("TextLabel")
+					local textLength = string.len(text.Text)
+					
+					v.Size = UDim2.new(0, 0, 0, 21)
+					text.Size = UDim2.new(0, 0, 0, 21)
+		
+					task.spawn(function()
+						for t = 1, textLength do
+							local letter = string.sub(text.Text, t, t)
+							if info.lettersSize[string.lower(letter)] then
+								v.Size = UDim2.new(0, v.Size.X.Offset + info.lettersSize[string.lower(letter)], 0, 21)
+							else
+								v.Size = UDim2.new(0, v.Size.X.Offset + 11, 0, 21)
+							end
+						end
+					end)
+					text.Size = v.Size
+					text.Position = UDim2.new(0, 0, 0, 0)
+					v.LayoutOrder = -textLength
+		
+					if v:FindFirstChildOfClass("ImageLabel") then
+						local il = v:FindFirstChildOfClass("ImageLabel")
+						il.Size = UDim2.new(0, v.Size.X.Offset + 15, 0, 36)
+						il.Position = UDim2.new(0.5, 0, 0.5, 0)
+					end
+				end
+			end
+		end
+	end
 	
 	function mainUtil:CreateTab(info)
 		local ButtonLayout = 0;
@@ -766,7 +846,7 @@ function library:Init(info)
 			
 			keybind.MouseButton1Click:Connect(function()
 				if not waitingToPress then
-					waitingToPress = true;
+					waitingToPress = true
 				end
 			end)
 			
@@ -781,26 +861,26 @@ function library:Init(info)
 							if infoButton.Enabled then
 								ts:Create(ButtonName, TweenInfo.new(0.5), {
 									TextColor3 = Color3.fromRGB(0, 0, 0)
-								}):Play();
+								}):Play()
 								ts:Create(Button, TweenInfo.new(0.5), {
 									BackgroundColor3 = Color3.fromRGB(138, 152, 255)
-								}):Play();
+								}):Play()
 							else
 								ts:Create(ButtonName, TweenInfo.new(0.5), {
 									TextColor3 = Color3.fromRGB(163, 163, 163)
-								}):Play();
+								}):Play()
 								ts:Create(Button, TweenInfo.new(0.5), {
 									BackgroundColor3 = Color3.fromRGB(13, 14, 24)
-								}):Play();
+								}):Play()
 							end
 						end
 					end
 					
 					if input.KeyCode == Enum.KeyCode.Backspace then
 						if waitingToPress then
-							waitingToPress = false;
-							key = nil;
-							keybindName.Text = " ... ";
+							waitingToPress = false
+							key = nil
+							keybindName.Text = " ... "
 							keybindName.TextColor3 = Color3.fromRGB(45, 47, 56)
 						end
 					end
@@ -809,47 +889,94 @@ function library:Init(info)
 						if waitingToPress then
 							waitingToPress = false;
 							if key ~= nil then
-								keybindName.Text = tostring(uis:GetStringForKeyCode(key));
+								keybindName.Text = tostring(uis:GetStringForKeyCode(key))
 								keybindName.TextColor3 = Color3.fromRGB(163, 163, 163)
 							end
 						end
 					else
 						if waitingToPress then
 							key = input.KeyCode;
-							keybindName.Text = tostring(uis:GetStringForKeyCode(key));
+							keybindName.Text = tostring(uis:GetStringForKeyCode(key))
 							keybindName.TextColor3 = Color3.fromRGB(163, 163, 163)
-							waitingToPress = false;
+							waitingToPress = false
 						end
 					end
 				end
 			end)
+
+			local ArrayFunction = Instance.new("Frame")
+			local TextLabel = Instance.new("TextLabel")
+			local UIListLayout_2 = Instance.new("UIListLayout")
+			local glow = Instance.new("ImageLabel")
+
+			ArrayFunction.Parent = Arraylist
+			ArrayFunction.BackgroundColor3 = Color3.fromRGB(10, 11, 18)
+			ArrayFunction.BorderSizePixel = 0
+			ArrayFunction.Position = UDim2.new(0.337748349, 0, -0.00126582163, 0)
+			ArrayFunction.Size = UDim2.new(0, 100, 0, 21)
+			ArrayFunction.Visible = false
+			
+			TextLabel.Parent = ArrayFunction
+			TextLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+			TextLabel.BackgroundTransparency = 1.000
+			TextLabel.BorderSizePixel = 0
+			TextLabel.Size = UDim2.new(0, 100, 0, 21)
+			TextLabel.ZIndex = 2
+			TextLabel.Font = Enum.Font.Unknown
+			TextLabel.Text = string.lower(infoButton.Name)
+			TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+			TextLabel.TextScaled = true
+			TextLabel.TextSize = 25.000
+			TextLabel.TextWrapped = true
+			TextLabel.TextXAlignment = Enum.TextXAlignment.Right
+			
+			UIListLayout_2.Parent = TextLabel
+			UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Right
+			UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
+			UIListLayout_2.VerticalAlignment = Enum.VerticalAlignment.Center
+			
+			glow.Name = "glow"
+			glow.Parent = ArrayFunction
+			glow.AnchorPoint = Vector2.new(0.5, 0.5)
+			glow.BackgroundTransparency = 1.000
+			glow.BorderSizePixel = 0
+			glow.Position = UDim2.new(0.5, 0, 0.5, 0)
+			glow.Size = UDim2.new(0, 100, 0, 36)
+			glow.ZIndex = 0
+			glow.Image = "rbxassetid://1316045217"
+			glow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+			glow.ImageTransparency = 0.510
+			glow.ScaleType = Enum.ScaleType.Slice
+			glow.SliceCenter = Rect.new(10, 10, 118, 118)
 			
 			if infoButton.Enabled then
 				ButtonName.TextColor3 = Color3.fromRGB(0, 0, 0)
 				Button.BackgroundColor3 = Color3.fromRGB(138, 152, 255)
+				ArrayFunction.Visible = true
 			end
 			
 			Button.MouseButton1Click:Connect(function()
 				infoButton.Enabled = not infoButton.Enabled;
+				ArrayFunction.Visible = infoButton.Enabled
 				Settings[infoButton.Flag].enabled = infoButton.Enabled
 				callback(infoButton.Enabled)
 				
 				if infoButton.Enabled then
 					ts:Create(ButtonName, TweenInfo.new(0.5), {
 						TextColor3 = Color3.fromRGB(0, 0, 0)
-					}):Play();
+					}):Play()
 					ts:Create(Button, TweenInfo.new(0.5), {
 						BackgroundColor3 = Color3.fromRGB(138, 152, 255)
-					}):Play();
+					}):Play()
 				else
 					ts:Create(ButtonName, TweenInfo.new(0.5), {
 						TextColor3 = Color3.fromRGB(163, 163, 163)
-					}):Play();
+					}):Play()
 					ts:Create(Button, TweenInfo.new(0.5), {
 						BackgroundColor3 = Color3.fromRGB(13, 14, 24)
-					}):Play();
+					}):Play()
 				end
-			end);
+			end)
 			
 			Button.MouseButton2Click:Connect(function()
 				infoButton.Open = not infoButton.Open;
@@ -859,19 +986,19 @@ function library:Init(info)
 
 					ts:Create(Dropdown, TweenInfo.new(0.5), {
 						Size = UDim2.new(0, 217, 0, dropdownYsize)
-					}):Play();
+					}):Play()
 				else
 					listAddY -= dropdownYsize;
 
 					ts:Create(Dropdown, TweenInfo.new(0.5), {
 						Size = UDim2.new(0, 217, 0, 0),
-					}):Play();
+					}):Play()
 				end
 
 				ts:Create(List, TweenInfo.new(0.5), {
 					Size = UDim2.new(0, 217, 0, listAddY)
-				});
-			end);
+				})
+			end)
 			
 			local items = {};
 			
@@ -1207,6 +1334,8 @@ function library:Init(info)
 			
 			return items;
 		end
+
+		resizeArray()
 		
 		return custom;
 	end
