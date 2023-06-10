@@ -954,6 +954,8 @@ function library:Init(info)
 				Button.BackgroundColor3 = Color3.fromRGB(138, 152, 255)
 				ArrayFunction.Visible = true
 			end
+
+			resizeArray()
 			
 			Button.MouseButton1Click:Connect(function()
 				infoButton.Enabled = not infoButton.Enabled;
@@ -1334,8 +1336,6 @@ function library:Init(info)
 			
 			return items;
 		end
-
-		resizeArray()
 		
 		return custom;
 	end
