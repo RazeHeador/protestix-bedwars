@@ -642,6 +642,7 @@ function library:Init(info)
 					text.Size = v.Size
 					text.Position = UDim2.new(0, 0, 0, 0)
 					v.LayoutOrder = -textLength
+					print(text.Text, -textLength)
 		
 					if v:FindFirstChildOfClass("ImageLabel") then
 						local il = v:FindFirstChildOfClass("ImageLabel")
@@ -1384,4 +1385,3 @@ spawn(function()
 end)]]
 
 return library;
--- 1
